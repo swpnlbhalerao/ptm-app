@@ -1,0 +1,63 @@
+
+<ion-header> 
+<!--   <ion-toolbar>
+  <ion-title text-center>
+    PTM
+  </ion-title>
+</ion-toolbar>
+https://github.com/Robinyo/big-top/tree/master/src/pages/sign-in -->
+</ion-header>
+
+
+<ion-content  padding >
+<form #f="ngForm" (ngSubmit)="submitForm(f)">
+<ion-grid>
+  <ion-row>
+    <ion-col text-center>
+        <img  src="https://github.com/Robinyo/big-top/blob/master/src/assets/imgs/logo.png?raw=true" height='80px'/>
+
+    </ion-col>
+  </ion-row>
+
+<ion-row justify-content-center>
+  <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+      <ion-list>
+          <ion-item>
+             <!--  <ion-icon name="business"slot="start"></ion-icon> -->
+              <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" ngModel name="email" email required
+            #emailCntrl="ngModel"
+            ></ion-input>
+          </ion-item>
+          <ion-item *ngIf="!emailCntrl.valid && emailCntrl.touched" lines="none">
+              <ion-label>Please enter valid email</ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" ngModel name="password" minlength="6" required #passwordCntrl="ngModel"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="!passwordCntrl.valid && passwordCntrl.touched" lines="none"> 
+              <ion-label>Please enter valid password</ion-label>
+          </ion-item>
+        </ion-list>
+
+  </ion-col>
+</ion-row>
+</ion-grid>
+<ion-grid>
+    <ion-row justify-content-center>
+      <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+    <ion-button type="submit" color="primary" expand="block" [disabled]="!f.valid" >Login</ion-button>
+
+    </ion-col>
+  </ion-row>
+  <ion-row justify-content-center no-padding>
+      <ion-col align-self-center size-md="6" size-lg="5" size-xs="12" no-padding>
+          <p text-center no-padding>Not an user . click here to    <a routerLink='/dashboard'>Register</a></p>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+
+</form>
+</ion-content>
