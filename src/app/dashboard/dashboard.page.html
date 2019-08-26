@@ -1,9 +1,30 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>dashboard</ion-title>
-  </ion-toolbar>
-</ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+      <ion-menu-button menu="m1"></ion-menu-button>
+    </ion-buttons>
+      <ion-title>Dashboard</ion-title>
+    </ion-toolbar>
+  </ion-header>
 
-<ion-content>
+<ion-content >
+    <div padding text-center>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+              <ion-segment (ionChange)="onFilterUpdate($event)" color="primary">
+                  <ion-segment-button value="bar"  checked>Monthy</ion-segment-button>
+                  <ion-segment-button value="pie">Share</ion-segment-button>
+                </ion-segment>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+
+       <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions"  *ngIf="(loading$ | async)"
+          style="height: 450px ;display: block;">
+       </highcharts-chart> 
+
 
 </ion-content>

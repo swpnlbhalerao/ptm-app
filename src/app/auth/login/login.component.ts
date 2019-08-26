@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthServices } from '../authservices';
+import { AuthService } from '../auth-service';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -11,28 +11,51 @@ import { AlertController } from '@ionic/angular';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private authServices: AuthServices, private router: Router, private alertCntrl: AlertController) { }
+  isLogin = true;
+  isLoading = false;
+
+  constructor(private authService: AuthService, 
+    private router: Router,
+    private alertCntrl: AlertController,
+    private loadingCntrl:LoadingController
+     ) { }
 
   ngOnInit() {}
 
-  submitForm(form: NgForm) {
+  authenticate(form: NgForm) {
     const formValue = form.value;
-    console.log(formValue);
-    this.authServices.login(formValue.email, formValue.password).subscribe(
-      response => {
-        if (response === 'success') {
-          this.router.navigateByUrl('dashboard');
-        } else {
-          console.log('failed');
-          this.showPop('Error Login', 'Invalid email or password', [{
+    this.isLoading = true;
+    this.loadingCntrl.create({ keyboardClose: true, message: 'Logging in...' })
+     .then(loadingEl=>{
+      loadingEl.present();
+      this.authService.login(formValue.email, formValue.password).subscribe(
+         response => {
+            if (response.status === 'success') {
+              loadingEl.dismiss();
+              this.router.navigateByUrl('dashboard');
+            } else {
+              loadingEl.dismiss();
+              console.log('failed');
+              this.showPop('Error Login', 'Invalid email or password', [{
+                role: 'invalid',
+                text : 'okay'
+              }] );
+            }
+         
+        },error=>{
+         // console.log(error);
+          loadingEl.dismiss();
+          this.showPop('Error Login', error, [{
             role: 'invalid',
             text : 'okay'
           }] );
-        }
-      }
-    );
+        })
+    })
 
   }
+
+
+  
 
   showPop(header: string, message: string, buttons: any) {
     this.alertCntrl.create({
