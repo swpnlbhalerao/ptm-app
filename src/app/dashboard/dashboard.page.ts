@@ -34,20 +34,7 @@ public loading$ = this.loadingSubject.asObservable();
 
   ngOnInit() {
       this.fetchDashBoard();
-    /* 
-    this.subscriptions.add(this.dataService.getPieChart(user,year).subscribe(response=>{
-      this.pieChartOptions = response;
-      this.loadingSubject1.next(true);
-    }, 
-    error=>{
-     console.log("Dashboard Error",error);
-       this.error=error
-       this.loadingSubject1.next(true);
-      }
-     )); */
-
-
-  }
+}
 
     fetchDashBoard(){
     this.dashBoardObs=null;
@@ -105,9 +92,6 @@ public loading$ = this.loadingSubject.asObservable();
       })
     );
   }
-
-
-
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }

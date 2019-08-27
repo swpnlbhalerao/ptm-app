@@ -1,0 +1,72 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+      <ion-menu-button menu="m1"></ion-menu-button>
+    </ion-buttons>
+      <ion-title>Dashboard</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content >
+    <!-- <ion-list>
+      <ion-item *ngFor="let d of diseases; let i=index" text-wrap (click)="toggleGroup(i)" [ngClass]="{active: isGroupShown(i)}">
+      <p text-center> {{d.title}}</p>
+          <ion-icon color="success" item-right [name]="isGroupShown(i) ? 'arrow-dropdown' : 'arrow-dropright'"></ion-icon>
+        
+        <div *ngIf="isGroupShown(i)">{{d.description}}</div>
+      </ion-item>
+    </ion-list> -->
+
+    
+
+  <ion-grid>
+      <h5 text-center class="ion-no-padding">Payment History</h5>
+      <ion-row *ngFor="let pay of payData; let i=index" text-wrap  [ngClass]="{active: isGroupShown(i)}">
+        <ion-col >
+          <ion-card >
+              <ion-card-content>
+                  <ion-row>
+                    <ion-col size="6">
+                        <p>Amount : {{pay.amount}}</p>
+                    </ion-col  >
+                    <ion-col size="6">
+                        <p>Status : {{pay.status}}</p>
+                    </ion-col>
+                    <ion-col size="6">
+                        <p>Date : {{pay.paymentDate | date}}</p>
+                    </ion-col  >
+                    <ion-col size="6">
+                        <p >Create Date : {{pay.crtDate | date}}</p>
+                    </ion-col>
+                  </ion-row> 
+                    <ion-row *ngIf="isGroupShown(i)">
+                        <ion-col size="12">
+                            <p>Aprroved Date : 25-03-2018</p>
+                        </ion-col>
+                        <ion-col size="12">
+                            <p>Approved by : success</p>
+                        </ion-col>
+                      <ion-col size="12">
+                          <div >NA</div>
+                      </ion-col>
+                  
+                      <div padding text-center class="ion-padding-start">
+                          <ion-button fill="outline" color="danger"  (click)="processPay('reject',i)"> <ion-icon slot="start" name="close"></ion-icon>Reject</ion-button>
+                          <ion-button  (click)="processPay('approve',i)"><ion-icon slot="start" name="add"></ion-icon>Approve</ion-button>
+                        </div>
+                    </ion-row>
+                   
+
+                </ion-card-content>
+                <div text-center class="ion-padding-end ion-no-padding">
+                    <ion-icon   (click)="toggleGroup(i)" style="zoom:1.8;"  color="success" item-right [name]="isGroupShown(i) ? 'arrow-dropdown' : 'arrow-dropright'"></ion-icon>
+                </div>
+              </ion-card>
+      <!--     <p>{{d.title}}</p>
+        </ion-col>
+        <ion-col size="12" size-sm="8" offset-sm="2" *ngIf="isGroupShown(i)">
+            <p >{{d.description}}</p> -->
+          </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>

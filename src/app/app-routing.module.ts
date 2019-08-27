@@ -5,9 +5,10 @@ import { AuthGuard } from './auth/auth-gaurd';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  { path: 'home', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)},
+ // { path: 'home', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)},
   {path : 'auth', component: LoginComponent},
-  { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardPageModule',canLoad:[AuthGuard] }
+  { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardPageModule',canLoad:[AuthGuard] },
+  { path: 'payment', loadChildren: './payment/payment.module#PaymentPageModule' ,canLoad:[AuthGuard]  }
 ];
 
 @NgModule({

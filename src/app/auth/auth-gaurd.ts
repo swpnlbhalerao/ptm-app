@@ -15,6 +15,8 @@ export class AuthGuard implements CanLoad {
     route: Route,
     segments: UrlSegment[]
   ): Observable<boolean> | Promise<boolean> | boolean {
+    
+    console.log("AuhGaurd called ..!!");
     return this.authService.userIsAuthenticated.pipe(
       take(1),
       switchMap(isAuthenticated => {
@@ -26,7 +28,7 @@ export class AuthGuard implements CanLoad {
       }),
       tap(isAuthenticated => {
         if (!isAuthenticated) {
-          this.router.navigateByUrl('/auth');
+          return this.router.navigateByUrl('/auth');
         }
       })
     );
