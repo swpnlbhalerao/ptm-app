@@ -6,6 +6,7 @@ import { UserInfo } from '../models/user-info.model';
 import { DashboardService } from './dashboard-service';
 import { take, switchMap } from 'rxjs/operators';
 import { SegmentChangeEventDetail } from '@ionic/core';
+import { SharedService} from '../shared/shared'
 
 
 @Component({
@@ -19,8 +20,6 @@ export class DashboardPage implements OnInit {
   highcharts = Highcharts;
   chartOptions:any;
   userDetails: UserInfo;
-  pieChart = Highcharts;
- // pieChartOptions;
   error: String = '';
   year = 2019;
   eventType="bar";
@@ -30,14 +29,19 @@ export class DashboardPage implements OnInit {
 private loadingSubject = new BehaviorSubject<boolean>(false);
 public loading$ = this.loadingSubject.asObservable();
 
-  constructor(private authService: AuthService, private dashboardService: DashboardService) { }
+  constructor(private authService: AuthService, 
+  private dashboardService: DashboardService,
+  private sharedService: SharedService) { }
 
   ngOnInit() {
       this.fetchDashBoard();
 }
 
     fetchDashBoard(){
-    this.dashBoardObs=null;
+
+    this.sharedService.showAlert('please wait ..').then(loaderEl=>{
+      loaderEl.present();
+      this.dashBoardObs=null;
     this.chartOptions=null;
    
      if(this.eventType === 'bar'){
@@ -51,14 +55,19 @@ public loading$ = this.loadingSubject.asObservable();
    this.subscriptions.add(this.dashBoardObs.subscribe(response => {
     this.chartOptions = response;
      this.loadingSubject.next(true);
-   console.log("chart options for  "+this.eventType,this.chartOptions);
+     loaderEl.dismiss()
+    console.log("chart options for  "+this.eventType,this.chartOptions);
    },
      error => {
        console.log("Dashboard Error", error);
        this.error = error
        this.loadingSubject.next(true);
+       loaderEl.dismiss();
      }
    ));
+    });
+    
+    
   }
 
   
@@ -70,8 +79,7 @@ public loading$ = this.loadingSubject.asObservable();
      this.fetchDashBoard();
   }  
   }
-
-
+ 
 
   getBarChart() {
     

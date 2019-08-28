@@ -1,0 +1,62 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+      <ion-menu-button menu="m1"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+        <ion-button routerLink="/dashboard"><ion-icon name="home"></ion-icon></ion-button>
+      </ion-buttons>
+      <ion-title>Approval</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+<ion-content >
+    <div padding text-center>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+              <ion-segment (ionChange)="onFilterUpdate($event)" color="primary">
+                  <ion-segment-button value="apr">Approvals</ion-segment-button>  
+                <ion-segment-button value="reg" checked>Registration</ion-segment-button>
+                </ion-segment>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <ion-grid>
+        <ion-row *ngFor="let apr of approvalData; let i=index" text-wrap  [ngClass]="{active: isGroupShown(i)}">
+            <ion-col >
+              <ion-card >
+                  <ion-card-content>
+                      <ion-row>
+                        <ion-col size="6">
+                            <p>Name:{{apr.name}}</p>
+                        </ion-col  >
+                        <ion-col size="6">
+                            <p>Amount:{{apr.amount}}</p>
+                        </ion-col>
+                        <ion-col size="6">
+                            <p>Date:{{apr.paymentDate | date}}</p>
+                        </ion-col  >
+                        <ion-col size="6">
+                            <p >Create:{{apr.crtDate | date}}</p>
+                        </ion-col>
+                      </ion-row> 
+                        <ion-row *ngIf="isGroupShown(i)">
+                          <div padding text-center class="ion-padding-start">
+                              <ion-button fill="outline" color="danger"  (click)="process('reject',apr.id)"> <ion-icon slot="start" name="close"></ion-icon>Reject</ion-button>
+                              <ion-button  (click)="process('approve',apr.id)"><ion-icon slot="start" name="add"></ion-icon>Approve</ion-button>
+                            </div>
+                        </ion-row>
+                    </ion-card-content>
+                    <div text-center class="ion-padding-end ion-no-padding">
+                        <ion-icon   (click)="toggleGroup(i)" style="zoom:1.8;"  color="success" item-right [name]="isGroupShown(i) ? 'arrow-dropdown' : 'arrow-dropright'"></ion-icon>
+                    </div>
+                  </ion-card>
+              </ion-col>
+          </ion-row>
+    </ion-grid>
+
+
+</ion-content>
