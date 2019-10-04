@@ -9,7 +9,7 @@ const routes: Routes = [
   {path : 'auth', component: LoginComponent},
   { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardPageModule',canLoad:[AuthGuard] },
   { path: 'payment', loadChildren: './payment/payment.module#PaymentPageModule' ,canLoad:[AuthGuard]  },
-  { path: 'approval', loadChildren: './approval/approval.module#ApprovalPageModule' }
+  { path: 'approval', loadChildren: './approval/approval.module#ApprovalPageModule' ,canLoad:[AuthGuard]  }
 ];
 
 @NgModule({

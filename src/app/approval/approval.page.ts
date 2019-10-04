@@ -21,6 +21,7 @@ export class ApprovalPage implements OnInit {
   eventType="apr";
   dashBoardObs:Observable<any>;
   approvalData:any
+  shownGroup = null;
 
   constructor(private alertCtrl: AlertController,
     private authService: AuthService,
@@ -35,22 +36,18 @@ export class ApprovalPage implements OnInit {
 
 fetchApprovals(){
 
-  this.sharedService.showAlert('please wait ..').then(loaderEl=>{
+    this.sharedService.showAlert('please wait ..').then(loaderEl=>{
     loaderEl.present();
     this.dashBoardObs=null;
-  this.approvalData=null;
+    this.approvalData=null;
  
-   if(this.eventType === 'apr'){
-   console.log("called apr");
-    this.dashBoardObs = this.getPayApprovals();
-   } else{
-    console.log("called reg");
-     this.dashBoardObs = this.getRegApprovals();
-   } 
+     this.dashBoardObs = this.getApprovals();
+    
  
  this.subscriptions.add(this.dashBoardObs.subscribe(response => {
-  this.approvalData = response;
-   loaderEl.dismiss()
+  this.approvalData = response.data;
+  console.log(this.approvalData);
+  loaderEl.dismiss()
  },
    error => {
      console.log("Approval Error", error);
@@ -73,30 +70,19 @@ onFilterUpdate(event :any){
 }
 
 
-getPayApprovals() {
-  
-  return this.authService.getUserInfo().pipe(take(1),
-    switchMap(userInfo => {
-      this.userDetails=userInfo.user
-    return this.approvalService.getPayApprovals();
-    })
-  );
+getApprovals() {
+ return this.authService.getUserInfo().pipe(take(1),
+  switchMap(userInfo => {
+    this.userDetails = userInfo.user
+    return  this.approvalService.getApprovals(this.eventType);
+  }));
 }
 
-getRegApprovals() {
-  
-  return this.authService.getUserInfo().pipe(take(1),
-    switchMap(userInfo => {
-      this.userDetails=userInfo.user
-      return this.approvalService.getRegApprovals;
-        })
-  );
-}
 ngOnDestroy() {
   this.subscriptions.unsubscribe();
 }
 
-process(status: string, id: number) {
+process(status: string, id: string) {
   console.log(status, id);
 
   this.alertCtrl.create({
@@ -113,9 +99,9 @@ process(status: string, id: number) {
       {
         text: 'Submit',
         role: 'submit',
-        handler: data => {
-          console.log('Submit  clicked', data);
-          this.processPayment(id, status, data);
+        handler: remarks => {
+          console.log('Submit  clicked', remarks.reason);
+          this.processPayment(id, status, remarks.reason);
         }
       },
     ], inputs: [
@@ -131,15 +117,63 @@ process(status: string, id: number) {
 
 }
 
-processPayment(id: number, status: string, reason: string) {
+processPayment(id: string, status: string, remarks: string) {
 
   this.sharedService.showAlert('please wait ..').then(loadingEl => {
     loadingEl.present();
+   
+
+    this.approvalService.proccessRequest(this.eventType,id, status, remarks,this.userDetails.userName).subscribe(
+      response => {
+        this.showAlert('success',response.message);
+        console.log(this.approvalData);
+        loadingEl.dismiss();
+       }, error => {
+           console.log("Approval Error", error);
+           this.error = error
+           this.showAlert('failed',error);
+           loadingEl.dismiss();
+         }
+         
+    );
+   
+   
+   
+   
     setTimeout(() => {
-      console.log(id, status, reason);
-      loadingEl.dismiss();
+      console.log(id, status, remarks,this.userDetails.userName)
+      
+      
+      
+      
     }, 2000);
 
   })
 }
+
+toggleGroup(group) {
+  if (this.isGroupShown(group)) {
+    this.shownGroup = null;
+  } else {
+    this.shownGroup = group;
+  }
+};
+isGroupShown(group) {
+  return this.shownGroup === group;
+};
+
+  private showAlert(status:string,message:string){
+    this.alertCtrl.create({
+      message: message,
+      header:status,
+      buttons: [
+        {
+          text: 'Close',
+          role: 'Okay',
+        }],
+    }).then(alertEl => {
+      alertEl.present();
+    })
+  }
+
 }

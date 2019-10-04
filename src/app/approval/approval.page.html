@@ -29,24 +29,43 @@
             <ion-col >
               <ion-card >
                   <ion-card-content>
-                      <ion-row>
-                        <ion-col size="6">
-                            <p>Name:{{apr.name}}</p>
-                        </ion-col  >
-                        <ion-col size="6">
-                            <p>Amount:{{apr.amount}}</p>
-                        </ion-col>
-                        <ion-col size="6">
-                            <p>Date:{{apr.paymentDate | date}}</p>
-                        </ion-col  >
-                        <ion-col size="6">
-                            <p >Create:{{apr.crtDate | date}}</p>
-                        </ion-col>
-                      </ion-row> 
+                      <div *ngIf="eventType==='apr'">
+                        <ion-row>
+                          <ion-col size="6">
+                            <p>Name:{{apr.userName}}</p>
+                          </ion-col  >
+                          <ion-col size="6">
+                              <p>Amount:{{apr.amount}}</p>
+                          </ion-col>
+                          <ion-col size="6">
+                              <p>Date:{{apr.paymentDate | date}}</p>
+                          </ion-col  >
+                          <ion-col size="6">
+                              <p >Create:{{apr.crtDate | date}}</p>
+                          </ion-col>
+                        </ion-row> 
+                      </div>
+                      <div *ngIf="eventType !=='apr'">
+                        <ion-row>
+                          <ion-col size="6">
+                              <p>Name:{{apr.firstName}}  {{apr.lastName}}</p>
+                          </ion-col  >
+                          <ion-col size="6">
+                              <p>Phone:{{apr.phone}}</p>
+                          </ion-col>
+                          <ion-col size="6">
+                              <p>Email:{{apr.email }}</p>
+                          </ion-col  >
+                          <ion-col size="6">
+                              <p >Create:{{apr.crtDate | date}}</p>
+                          </ion-col>
+                        </ion-row> 
+                      </div>
+
                         <ion-row *ngIf="isGroupShown(i)">
                           <div padding text-center class="ion-padding-start">
-                              <ion-button fill="outline" color="danger"  (click)="process('reject',apr.id)"> <ion-icon slot="start" name="close"></ion-icon>Reject</ion-button>
-                              <ion-button  (click)="process('approve',apr.id)"><ion-icon slot="start" name="add"></ion-icon>Approve</ion-button>
+                              <ion-button fill="outline" color="danger"  (click)="process('rejected',apr._id)"> <ion-icon slot="start" name="close"></ion-icon>Reject</ion-button>
+                              <ion-button  (click)="process('approved',apr._id)"><ion-icon slot="start" name="add"></ion-icon>Approve</ion-button>
                             </div>
                         </ion-row>
                     </ion-card-content>
